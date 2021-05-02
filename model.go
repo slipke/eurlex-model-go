@@ -32,14 +32,14 @@ func (n *Notice) String() string {
 //
 
 type Work struct {
-	Link
+	Identifier
 	ResourceLegalIsAboutSubjectMatter              []*ResourceLegalIsAboutSubjectMatter `xml:"RESOURCE_LEGAL_IS_ABOUT_SUBJECT-MATTER"`
 	WorkCitesWork                                  []*Link                              `xml:"WORK_CITES_WORK"`
 	WorkHasExpression                              []*Link                              `xml:"WORK_HAS_EXPRESSION"` // Link to Expressions
 	ResourceLegalELI                               string                               `xml:"RESOURCE_LEGAL_ELI>VALUE"`
 	ResourceLegalImplicitlyRepealsResourceLegal    []*Link                              `xml:"RESOURCE_LEGAL_IMPLICITLY_REPEALS_RESOURCE_LEGAL"`
 	Date                                           []*Date                              `xml:"DATE"`
-	Identifier                                     []string                             `xml:"IDENTIFIER>VALUE"`
+	IdentifierItem                                 []string                             `xml:"IDENTIFIER>VALUE"`
 	IsAbout                                        []*Concept                           `xml:"IS_ABOUT"`
 	ResourceLegalNumberNatural                     string                               `xml:"RESOURCE_LEGAL_NUMBER_NATURAL>VALUE"`
 	CreationDate                                   *Date                                `xml:"CREATIONDATE"`
@@ -171,7 +171,7 @@ func (i *Inverse) String() string {
 //
 
 type Expression struct {
-	Link
+	Identifier
 	ExpressionManifestedByManifestation []*Link  `xml:"EXPRESSION_MANIFESTED_BY_MANIFESTATION"` // List of manifestations for expression (^= different languages for current expression)
 	Lang                                []string `xml:"LANG>VALUE"`
 	LastModificationDate                *Date    `xml:"LASTMODIFICATIONDATE"`
@@ -202,7 +202,7 @@ func (e *Expression) String() string {
 
 type Manifestation struct {
 	ManifestationTypeAttr string `xml:"manifestation-type,attr"`
-	Link
+	Identifier
 	LastModificationDate                           *Date                   `xml:"LASTMODIFICATIONDATE"`
 	ManifestationManifestsExpression               *Link                   `xml:"MANIFESTATION_MANIFESTS_EXPRESSION"`
 	CreationDate                                   *Date                   `xml:"CREATIONDATE"`
@@ -236,15 +236,17 @@ func (m *Manifestation) String() string {
 }
 
 type ManifestationHasItem struct {
-	Link
+	Identifier
 	TechMD                     *TechMD `xml:"TECHMD"`
 	ItemIdentifier             string  `xml:"ITEM_IDENTIFIER>VALUE"`
-	Identifier                 string  `xml:"IDENTIFIER>VALUE"`
+	IdentifierItem             string  `xml:"IDENTIFIER>VALUE"`
 	BelongsTo                  *Link   `xml:"BELONGS_TO"`
 	ItemBelongsToManifestation *Link   `xml:"ITEM_BELONGS_TO_MANIFESTATION"`
 }
 
 type TechMD struct {
+	ManifestationType      string `xml:"MANIFESTATION_TYPE"`
+	MimeType               string `xml:"MIME-TYPE"`
 	StreamCompositionLevel string `xml:"STREAM_COMPOSITION_LEVEL>VALUE"`
 	StreamSize             string `xml:"STREAM_SIZE>VALUE"`
 	StreamName             string `xml:"STREAM_NAME>VALUE"`
@@ -267,14 +269,21 @@ type Date struct {
 	Annotation []*Annotation `xml:"ANNOTATION"`
 }
 
+type Identifier struct {
+	URI    *URI      `xml:"URI"`
+	SameAs []*SameAs `xml:"SAMEAS"`
+}
+
 // Link encapsulates properties URI and SAMEAS and attribute type
 // type="link"
 type Link struct {
-	Type           string        `xml:"type,attr"`
-	URI            *URI          `xml:"URI"`
-	SameAs         []*SameAs     `xml:"SAMEAS"`
+	Type string `xml:"type,attr"`
+	Identifier
 	EmbeddedNotice *Notice       `xml:"EMBEDDED_NOTICE"`
 	Annotation     []*Annotation `xml:"ANNOTATION"`
+	IdentifierVal  string        `xml:"IDENTIFIER"`
+	PrefLabel      string        `xml:"PREFLABEL"`
+	AltLabel       []string      `xml:"ALTLABEL"`
 }
 
 type URI struct {
@@ -309,13 +318,15 @@ type Concept struct {
 	URI        *URI     `xml:"URI"`
 	OpCode     string   `xml:"OP-CODE"`
 	Identifier string   `xml:"IDENTIFIER"`
-	Preflabel  string   `xml:"PREFLABEL"`
+	PrefLabel  string   `xml:"PREFLABEL"`
 	AltLabel   []string `xml:"ALTLABEL"`
 	CompactURI string   `xml:"COMPACT_URI"`
+	Fallback   string   `xml:"FALLBACK"`
 }
 
 // ConceptFacet .
 // type="concept_facet"
+// @TODO Complex datatype, children: <property-name_{facet.acronym} type="concept">...
 type ConceptFacet struct {
 	Type                             string   `xml:"type,attr"`
 	WorkIsAboutConceptEurovocConcept *Concept `xml:"WORK_IS_ABOUT_CONCEPT_EUROVOC_CONCEPT"`
