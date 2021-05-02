@@ -11,7 +11,7 @@ type Notice struct {
 	Type          string           `xml:"type,attr"`
 	Work          *Work            `xml:"WORK"`
 	Inverse       []*Inverse       `xml:"INVERSE"`
-	Expression    *Expression      `xml:"EXPRESSION"`
+	Expression    []*Expression    `xml:"EXPRESSION"`
 	Manifestation []*Manifestation `xml:"MANIFESTATION"`
 }
 
@@ -61,7 +61,7 @@ type Work struct {
 	ResouceLegalType                               string                               `xml:"RESOURCE_LEGAL_TYPE>VALUE"`
 	ResouceLegalDateEndOfValidity                  *Date                                `xml:"RESOURCE_LEGAL_DATE_END-OF-VALIDITY"`
 	WorkIDDocument                                 []string                             `xml:"WORK_ID_DOCUMENT>VALUE"`
-	ResourceLegalInForce                           string                               `xml:"RESOURCE_LEGAL_IN-FORCE>VALUE"` // @TODO bool?
+	ResourceLegalInForce                           bool                                 `xml:"RESOURCE_LEGAL_IN-FORCE>VALUE"`
 	ResourceLegalBasedOnResourceLegal              []*Link                              `xml:"RESOURCE_LEGAL_BASED_ON_RESOURCE_LEGAL"`
 	ResourceLegalRepertoire                        string                               `xml:"RESOURCE_LEGAL_REPERTOIRE>VALUE"`
 	IDSector                                       string                               `xml:"ID_SECTOR>VALUE"`
@@ -79,6 +79,13 @@ type Work struct {
 	LastModificationDate                           *Date                                `xml:"LASTMODIFICATIONDATE"`
 	Type                                           []string                             `xml:"TYPE"`
 
+	// From eurlex-ws-go
+	DatePublication                         string `xml:"DATE_PUBLICATION>VALUE"`
+	OfficialJournalClass                    string `xml:"OFFICIAL-JOURNAL_CLASS>VALUE"`
+	OfficialJournalNumber                   string `xml:"OFFICIAL-JOURNAL_NUMBER>VALUE"`
+	OfficialJournalPartOfCollectionDocument *Link  `xml:"OFFICIAL-JOURNAL_PART_OF_COLLECTION_DOCUMENT"`
+	OfficialJournalYear                     string `xml:"OFFICIAL-JOURNAL_YEAR>VALUE"`
+
 	// @TODO Same as is INVERSE
 	ResourceLegalBasisForActConsolidated          []*Link `xml:"RESOURCE_LEGAL_BASIS_FOR_ACT_CONSOLIDATED"`
 	ResourceLegalConsolidatedByActConsolidated    []*Link `xml:"RESOURCE_LEGAL_CONSOLIDATED_BY_ACT_CONSOLIDATED"`
@@ -95,9 +102,14 @@ type Work struct {
 }
 
 func (w *Work) String() string {
+	u := ""
+	if w.URI != nil {
+		u = w.URI.Value
+	}
+
 	return fmt.Sprintf(
 		"Work URI = %s, len(ResourceLegalIsAboutSubjectMatter) = %d, len(WorkCitesWork) = %d, len(WorkHasExpression) = %d, Identifier = %+v, CreationDate = %+v, IDCelex  %s, ELI = %s, IDSector = %s, Type = %+v",
-		w.URI.Value,
+		u,
 		len(w.ResourceLegalIsAboutSubjectMatter),
 		len(w.WorkCitesWork),
 		len(w.WorkHasExpression),
@@ -123,9 +135,8 @@ type ResourceLegalIsAboutSubjectMatter struct {
 //
 
 type Inverse struct {
-	Complete          bool   `xml:"complete,attr"`
-	ManifestationType string `xml:"manifestation-type,attr"`
-	// @TODO Check after Work struct is finished
+	Complete                                      bool    `xml:"complete,attr"`
+	ManifestationType                             string  `xml:"manifestation-type,attr"`
 	ResourceLegalBasisForActConsolidated          []*Link `xml:"RESOURCE_LEGAL_BASIS_FOR_ACT_CONSOLIDATED"`
 	ResourceLegalConsolidatedByActConsolidated    []*Link `xml:"RESOURCE_LEGAL_CONSOLIDATED_BY_ACT_CONSOLIDATED"`
 	ResourceLegalCorrectedByResourceLegal         []*Link `xml:"RESOURCE_LEGAL_CORRECTED_BY_RESOURCE_LEGAL"`
@@ -174,7 +185,7 @@ type Expression struct {
 
 func (e *Expression) String() string {
 	return fmt.Sprintf(
-		"Expression URI = %s, Lang = %+v, CreationDate = %+v, LastModificationDate = %+v, ExpressionTitle = %s, ExpressionTitleShort = %s, len(ExpressionManifestedByManifestation) = %d",
+		"Expression URI = %+v, Lang = %+v, CreationDate = %+v, LastModificationDate = %+v, ExpressionTitle = %s, ExpressionTitleShort = %s, len(ExpressionManifestedByManifestation) = %d",
 		e.URI,
 		e.Lang,
 		e.CreationDate,
@@ -300,6 +311,7 @@ type Concept struct {
 	Identifier string   `xml:"IDENTIFIER"`
 	Preflabel  string   `xml:"PREFLABEL"`
 	AltLabel   []string `xml:"ALTLABEL"`
+	CompactURI string   `xml:"COMPACT_URI"`
 }
 
 // ConceptFacet .
