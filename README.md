@@ -43,3 +43,10 @@ func main() {
 ```
 
 ## Resources
+
+- [Cellar Interface](https://op.europa.eu/documents/10530/676542/ao10463_annex_17_cellar_dissemination_interface_en.pdf)
+- [eurlex-ws-go](https://github.com/slipke/eurlex-ws-go)
+- [EUR-Lex Help](https://eur-lex.europa.eu/content/help/webservice.html)
+- [Web Service User Manual](https://eur-lex.europa.eu/content/tools/webservices/SearchWebServiceUserManual_v2.00.pdf)
+- [Web Service Query Metadata](https://eur-lex.europa.eu/content/tools/webservices/WebServicesqueryMetadata.pdf)
+- [Data Extraction Using Web Services](https://eur-lex.europa.eu/content/tools/webservices/DataExtractionUsingWebServices-v1.00.pdf)
