@@ -78,6 +78,16 @@ type Work struct {
 	WorkTableOfContents                            string                               `xml:"WORK_TABLE-OF-CONTENTS>VALUE"`
 	LastModificationDate                           *Date                                `xml:"LASTMODIFICATIONDATE"`
 	Type                                           []string                             `xml:"TYPE"`
+	ResourceLegalBasisForActConsolidated           []*Link                              `xml:"RESOURCE_LEGAL_BASIS_FOR_ACT_CONSOLIDATED"`
+	ResourceLegalConsolidatedByActConsolidated     []*Link                              `xml:"RESOURCE_LEGAL_CONSOLIDATED_BY_ACT_CONSOLIDATED"`
+	ResourceLegalCorrectedByResourceLegal          []*Link                              `xml:"RESOURCE_LEGAL_CORRECTED_BY_RESOURCE_LEGAL"`
+	ResourceLegalAmendedByResourceLegal            []*Link                              `xml:"RESOURCE_LEGAL_AMENDED_BY_RESOURCE_LEGAL"`
+	ResourceLegalInterpretationRequestedByCaseLaw  []*Link                              `xml:"RESOURCE_LEGAL_INTERPRETATION_REQUESTED_BY_CASE-LAW"`
+	WorkSummarizedBySummary                        *Link                                `xml:"WORK_SUMMARIZED_BY_SUMMARY"`
+	ResourceLegalProducedByDossier                 []*Link                              `xml:"RESOURCE_LEGAL_PRODUCED_BY_DOSSIER"`
+	ResourceLegalAmendmentProposedByResourceLegal  []*Link                              `xml:"RESOURCE_LEGAL_AMENDMENT_PROPOSED_BY_RESOURCE_LEGAL"`
+	WorkPartOfDossier                              []*Link                              `xml:"WORK_PART_OF_DOSSIER"`
+	WorkPartOfEventLegal                           []*Link                              `xml:"WORK_PART_OF_EVENT_LEGAL"`
 
 	// From eurlex-ws-go
 	DatePublication                         string `xml:"DATE_PUBLICATION>VALUE"`
@@ -85,18 +95,6 @@ type Work struct {
 	OfficialJournalNumber                   string `xml:"OFFICIAL-JOURNAL_NUMBER>VALUE"`
 	OfficialJournalPartOfCollectionDocument *Link  `xml:"OFFICIAL-JOURNAL_PART_OF_COLLECTION_DOCUMENT"`
 	OfficialJournalYear                     string `xml:"OFFICIAL-JOURNAL_YEAR>VALUE"`
-
-	// @TODO Same as is INVERSE
-	ResourceLegalBasisForActConsolidated          []*Link `xml:"RESOURCE_LEGAL_BASIS_FOR_ACT_CONSOLIDATED"`
-	ResourceLegalConsolidatedByActConsolidated    []*Link `xml:"RESOURCE_LEGAL_CONSOLIDATED_BY_ACT_CONSOLIDATED"`
-	ResourceLegalCorrectedByResourceLegal         []*Link `xml:"RESOURCE_LEGAL_CORRECTED_BY_RESOURCE_LEGAL"`
-	ResourceLegalAmendedByResourceLegal           []*Link `xml:"RESOURCE_LEGAL_AMENDED_BY_RESOURCE_LEGAL"`
-	ResourceLegalInterpretationRequestedByCaseLaw []*Link `xml:"RESOURCE_LEGAL_INTERPRETATION_REQUESTED_BY_CASE-LAW"`
-	WorkSummarizedBySummary                       *Link   `xml:"WORK_SUMMARIZED_BY_SUMMARY"`
-	ResourceLegalProducedByDossier                []*Link `xml:"RESOURCE_LEGAL_PRODUCED_BY_DOSSIER"`
-	ResourceLegalAmendmentProposedByResourceLegal []*Link `xml:"RESOURCE_LEGAL_AMENDMENT_PROPOSED_BY_RESOURCE_LEGAL"`
-	WorkPartOfDossier                             []*Link `xml:"WORK_PART_OF_DOSSIER"`
-	WorkPartOfEventLegal                          []*Link `xml:"WORK_PART_OF_EVENT_LEGAL"`
 
 	// ResourceLegalIsAboutConceptDirectoryCode *? `xml:"RESOURCE_LEGAL_IS_ABOUT_CONCEPT_DIRECTORY-CODE"` // @TODO Fix weird structure
 }
